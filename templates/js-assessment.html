@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Skills JavaScript</title>
+  <script src="https://code.jquery.com/jquery.js"></script>
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="static/styles.css">
 </head>
@@ -38,7 +39,15 @@
 
 <script>
   "use strict";
-  // code here for above-problem
+  var button = document.getElementById('change-hello-to-goodbye-button');
+  var message = document.getElementById('message-to-change');
+
+  function changeMessage(){
+    message.innerHTML = "goodbye";
+  }
+
+  button.addEventListener('click', changeMessage);
+  
 </script>
 
 <div class="hint">
@@ -66,7 +75,14 @@
 
 <script>
   "use strict";
-  // code here for above problem
+  var button = document.getElementById('prevent-form-submission-button');
+
+  function alertClick(evt){
+    evt.preventDefault();
+    alert("That tickles!");
+  }
+
+  button.addEventListener('click', alertClick);
 </script>
 
 <div class="hint">
@@ -89,16 +105,23 @@
 <script>
   "use strict";
 
-//  Here's a stub of a function you can use!
+ //Here's a stub of a function you can use!
+  var button = document.getElementById('reverse-string-button');
 
-//  function reverseString(evt) {
-//    var msg = "Porcupines are cute";
-//
-//    // do some stuff here to reverse that string into a new variable
-//    var newMsg = "This should be the reversed string";
-//
-//    alert(newMsg);
-//  }
+  function reverseString(evt) {
+
+    var msg = "Porcupines are cute";
+    var newMsg = "";
+
+    // do some stuff here to reverse that string into a new variable
+    for (var i = msg.length - 1; i >= 0; i--) {
+        newMsg += msg[i];
+    }
+
+    alert(newMsg);
+  }
+
+  button.addEventListener('click', reverseString);
 
 
 </script>
@@ -122,6 +145,32 @@
   "use strict";
   // code here for above problem
   // if user enters 5, result will be 1 + 2 + 3 + 4 + 5 = 15
+
+  var theNum = document.getElementById('sum-to-n-field')
+  var sumSpan = document.getElementById('sum-to-n-result')
+  var button = document.getElementById('sum-to-n-submission-button')
+  var mssgString = ""
+
+  function changeMessage(evt){
+    evt.preventDefault();
+    
+    var total = 0;
+
+    for (var i = 1; i <= theNum.value; i++){
+
+      if (i < Number(theNum.value)){
+        mssgString += (i + ' + ');
+        total += i;
+      } else if (i = Number(theNum.value)){
+        mssgString += i + ' ';
+        total += i;
+      }
+    }
+
+    sumSpan.innerHTML = ('Sum: ' + mssgString + '= ' + total);
+  }
+
+  button.addEventListener('click', changeMessage);
 
 </script>
 
@@ -153,7 +202,13 @@
 
 <script>
   "use strict";
-  // put your code here
+
+  function changePic(){
+    $('#kittenz-rule').attr('src', 'https://s-media-cache-ak0.pinimg.com/736x/ac/93/fb/ac93fb4860e77e334e289d5025f6db14.jpg');
+  }
+
+  $('#kittenz-rule').on('click', changePic)
+
 </script>
 
 <div class="hint">
@@ -184,7 +239,53 @@
 
 <script>
   "use strict";
-  // put your code here
+
+  // used info from https://www.w3schools.com/jsref/prop_text_disabled.asp
+  // super fun problem but I had to move on.
+
+  var button = document.getElementById('play-guessing-game');
+  var guessButton = document.getElementById('try-this-number');
+  var form = document.getElementById('guessing-game-form');
+  var randomNum = 0
+
+  function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min; 
+  }
+
+  function playGame(evt){
+    evt.preventDefault();
+    document.getElementById('play-guessing-game').disabled = true;
+
+    randomNum = getRandomIntInclusive(1, 100);
+    $('#number-guessing-msg').html('Hi! Guess an integer (a whole number).' );
+
+    document.getElementById('number-guessed').disabled = false;
+    document.getElementById('try-this-number').disabled = false;
+
+  }
+
+  function guessNum(evt){
+    var userNum = Number(document.getElementById('number-guessed').value);
+
+    if (userNum < randomNum){
+      $('#number-guessing-msg').html('That number is too low. Guess again!');
+
+    } else if (userNum > randomNum){
+      $('#number-guessing-msg').html('That number is too high. Guess again!');
+
+    } else if (userNum === randomNum){
+      $('#number-guessing-msg').html('Correct! Congrats!');
+      document.getElementById('guessing-game-form').disabled = true;
+      document.getElementById('play-guessing-game').disabled = false; 
+    }
+  }
+
+  button.addEventListener('click', playGame);
+  guessButton.addEventListener('click', playGame);
+
+
 </script>
 
 
@@ -250,7 +351,17 @@
     $("#t-rex-img").append(tRexPhoto);
   }
 
-  // put your code here
+  function attack(evt){
+    evt.preventDefault()
+
+    var formInputs = {
+      'attack-target': $('#attack-target').val()
+    };
+
+    $.post('/t-rex-attack.json', formInputs, showTRexResults);
+  }
+
+  $('#attack').on('click', attack);
 
 </script>
 
